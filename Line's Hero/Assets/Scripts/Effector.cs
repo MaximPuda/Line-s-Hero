@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class Effector : MonoBehaviour
 {
-    public ParticleSystem lineClearedParticles;
-    public ParticleSystem newParticles;
+    public ParticleSystem[] lineClearedParticles;
 
-    public void PlayLineCleardParticles(float lineY)
+    public void PlayLineClearedParticles(float lineY)
     {
-        newParticles = Instantiate(lineClearedParticles);
-        newParticles.transform.position = new Vector3(4.5f, lineY, -1f);
+        for (int i = 0; i < lineClearedParticles.Length; i++)
+            if (!lineClearedParticles[i].isPlaying)
+            {
+                lineClearedParticles[i].transform.position = new Vector3(4.5f, lineY, -1f);
+                lineClearedParticles[i].Play();
+                break;
+            }
     }
 }

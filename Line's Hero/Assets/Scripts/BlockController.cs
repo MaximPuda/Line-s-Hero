@@ -3,15 +3,16 @@ using UnityEngine;
 public class BlockController : MonoBehaviour
 
 {
-    public GameManager gameManager;
-    public ScoreSystem scoreSystem;
-    public Effector effector;
-    public Spawner2 spawner;
-    public Transform blockTransform;
-    public Transform rotationPoint;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private ScoreSystem scoreSystem;
+    [SerializeField] private Effector effector;
+    [SerializeField] private Spawner2 spawner;
 
-    [SerializeField] private static float fallTime = 0.8f;
-    [SerializeField] private static float horizontalMoveTime = 0.8f;
+    [SerializeField] private float fallTime = 0.8f;
+    [SerializeField] private float horizontalMoveTime = 0.8f;
+
+    private Transform activeBlockTransform;
+    private Transform rotationPoint;
 
     private float previousTime;
     private float previousSideMoveTime;
@@ -27,9 +28,9 @@ public class BlockController : MonoBehaviour
     public enum SwipeDirection {Left, Right, Up, Down}
     public SwipeDirection swipeDirection = new SwipeDirection();
 
-    void Update()
+    private void Update()
     {
-        if (!GameManager.gamePaused && !GameManager.gameEnded)
+        if (!GameManager.gamePaused && !GameManager.gameEnded && activeBlockTransform != null)
         {
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
                 TurnLeft();
@@ -54,7 +55,7 @@ public class BlockController : MonoBehaviour
         } 
     }
 
-    public void Swipe()
+    private void Swipe()
     {
         Touch activeTouch = Input.GetTouch(0);
 
@@ -63,24 +64,6 @@ public class BlockController : MonoBehaviour
 
         if (activeTouch.phase == TouchPhase.Moved)
         {
-            //if ((activeTouch.position.x - startSwipe.x) > swipeDeadZone)
-            //{
-            //    TurnRight();
-            //    startSwipe = activeTouch.position;
-            //}   
-
-            //else if (activeTouch.position.x - startSwipe.x < -swipeDeadZone)
-            //{
-            //    TurnLeft();
-            //    startSwipe = activeTouch.position;
-            //}
-
-            //else if (activeTouch.position.y - startSwipe.y < -swipeDeadZone)
-            //{
-            //    FallingDown();
-            //    startSwipe = activeTouch.position;
-            //}
-
             switch (GetSwipeDirection(activeTouch))
             {
                 case SwipeDirection.Left:
@@ -141,53 +124,53 @@ public class BlockController : MonoBehaviour
         return swipeDirection;
     }
 
-    public void TurnLeft()
+    private void TurnLeft()
     {
         if (Time.time - previousSideMoveTime > horizontalMoveTime / 10)
         {
-            blockTransform.position += Vector3.left;
+            activeBlockTransform.position += Vector3.left;
                      
             if (ValidMove())
-                blockTransform.position += Vector3.right;
+                activeBlockTransform.position += Vector3.right;
 
             previousSideMoveTime = Time.time;
         }
     }
 
-    public void TurnLeftSwipe()
+    private void TurnLeftSwipe()
     {
-        blockTransform.position += Vector3.left;
+        activeBlockTransform.position += Vector3.left;
 
         if (ValidMove())
-            blockTransform.position += Vector3.right;
+            activeBlockTransform.position += Vector3.right;
     }
 
-    public void TurnRight()
+    private void TurnRight()
     {
         if (Time.time - previousSideMoveTime > horizontalMoveTime / 10)
         {
-            blockTransform.position += Vector3.right;
+            activeBlockTransform.position += Vector3.right;
 
             if (ValidMove())
-                blockTransform.position += Vector3.left;
+                activeBlockTransform.position += Vector3.left;
 
             previousSideMoveTime = Time.time;
         }
     }
 
-    public void TurnRightSwipe()
+    private void TurnRightSwipe()
     {
-        blockTransform.position += Vector3.right;
+        activeBlockTransform.position += Vector3.right;
 
         if (ValidMove())
-            blockTransform.position += Vector3.left;
+            activeBlockTransform.position += Vector3.left;
     }
 
     private void Rotate()
     {
-        blockTransform.RotateAround(rotationPoint.position, new Vector3(0, 0, 1), 90);
+        activeBlockTransform.RotateAround(rotationPoint.position, new Vector3(0, 0, 1), 90);
         if (ValidMove())
-            blockTransform.RotateAround(rotationPoint.position, new Vector3(0, 0, 1), -90);
+            activeBlockTransform.RotateAround(rotationPoint.position, new Vector3(0, 0, 1), -90);
     }
 
     private void FallingDown()
@@ -195,11 +178,11 @@ public class BlockController : MonoBehaviour
         if (!GameManager.gameEnded)
         {
 
-            blockTransform.position += new Vector3(0, -1, 0);
+            activeBlockTransform.position += new Vector3(0, -1, 0);
 
             if (ValidMove())
             {
-                blockTransform.position -= new Vector3(0, -1, 0);
+                activeBlockTransform.position -= new Vector3(0, -1, 0);
                 AddToGrid();
                 CheckForLines();
                 if(!GameManager.gameEnded)
@@ -215,9 +198,9 @@ public class BlockController : MonoBehaviour
 
     }
 
-    bool ValidMove()
+    private bool ValidMove()
     {
-        foreach (Transform children in blockTransform)
+        foreach (Transform children in activeBlockTransform)
         {
             if (children.tag == "Cube")
             {
@@ -235,9 +218,9 @@ public class BlockController : MonoBehaviour
         return false;
     }
 
-    void AddToGrid()
+    private void AddToGrid()
     {
-        foreach (Transform children in blockTransform)
+        foreach (Transform children in activeBlockTransform)
         {
             if (children.tag == "Cube")
             {
@@ -252,7 +235,7 @@ public class BlockController : MonoBehaviour
         }
     }
 
-    void CheckForLines()
+    private  void CheckForLines()
     {
         int combo = 0;
 
@@ -261,7 +244,7 @@ public class BlockController : MonoBehaviour
             if (HasLine(row))
             {
                 scoreSystem.AddLines();
-                effector.PlayLineCleardParticles(row);
+                effector.PlayLineClearedParticles(row);
                 DeleteLine(row);
                 RowDown(row);
                 combo++;
@@ -272,7 +255,7 @@ public class BlockController : MonoBehaviour
             scoreSystem.CheckCombo(combo);
     }
 
-    bool HasLine(int row)
+    private bool HasLine(int row)
     {
         for (int column = 0; column < width; column++)
         {
@@ -282,7 +265,7 @@ public class BlockController : MonoBehaviour
         return true;
     }
 
-    void DeleteLine(int row)
+    private void DeleteLine(int row)
     {
         for (int column = 0; column < width; column++)
         {
@@ -291,7 +274,7 @@ public class BlockController : MonoBehaviour
         }
     }
 
-    void RowDown(int row)
+    private void RowDown(int row)
     {
         for (int activeRow = row; activeRow < height; activeRow++)
         {
@@ -305,6 +288,17 @@ public class BlockController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetActiveBlock(Transform blockTransform)
+    {
+        activeBlockTransform = blockTransform;
+        rotationPoint = activeBlockTransform.GetChild(4);
+    }
+
+    public Transform GetaActiveBlock()
+    {
+        return activeBlockTransform;
     }
 
     public static void SpeedUp()

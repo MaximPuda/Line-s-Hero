@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Board
   m_Shader: {fileID: 45, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHABLEND_ON
+  m_ShaderKeywords: _ALPHABLEND_ON _GLOSSYREFLECTIONS_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -89,8 +89,8 @@ Material:
     - _DstBlend: 10
     - _EnvironmentReflections: 1
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
-    - _GlossyReflections: 1
+    - _Glossiness: 1
+    - _GlossyReflections: 0
     - _Metallic: 0
     - _Mode: 2
     - _OcclusionStrength: 1
@@ -107,7 +107,7 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 0.086033374, g: 0, b: 0.17799999, a: 1}
-    - _Color: {r: 0.027866656, g: 0, b: 0.056999996, a: 0.6745098}
+    - _Color: {r: 0.0010240002, g: 0.0030207983, b: 0.016, a: 0.6745098}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
