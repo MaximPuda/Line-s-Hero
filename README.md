@@ -1,1 +1,2 @@
-🎮Hyper-casual mobile puzzle game.
+# TETRIX MANIA
+🎮 Hyper-casual mobile puzzle game.
