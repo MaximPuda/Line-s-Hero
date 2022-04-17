@@ -1,14 +1,13 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class ScoreSystem : MonoBehaviour
 {
-    public int scoreOneLine = 100;
-    public int scoreTwoLine = 300;
-    public int scoreThreeLine = 900;
-    public int scoreFourLine = 1500;
+    [SerializeField] private int scoreOneLine = 100;
+    [SerializeField] private int scoreTwoLine = 300;
+    [SerializeField] private int scoreThreeLine = 700;
+    [SerializeField] private int scoreFourLine = 1500;
 
     public TextMeshProUGUI linesText;
     public TextMeshProUGUI scoreText;

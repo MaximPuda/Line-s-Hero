@@ -20,14 +20,20 @@ public class BlockController : MonoBehaviour
     private static int height = 20;
     private static int width = 10;
 
-    private static Transform[,] grid = new Transform[width, height];
+    private static Transform[,] grid;
 
     private float swipeDeadZone = 60;
     private Vector2 startSwipe;
 
     public enum SwipeDirection {Left, Right, Up, Down}
-    public SwipeDirection swipeDirection = new SwipeDirection();
+    private SwipeDirection swipeDirection;
 
+
+    private void Awake()
+    {
+        grid = new Transform[width, height];
+        swipeDirection = new SwipeDirection();
+    }
     private void Update()
     {
         if (!GameManager.gamePaused && !GameManager.gameEnded && activeBlockTransform != null)
