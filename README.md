@@ -1,87 +1,36 @@
-# Line's Hero - Mobile 3D puzzle game
+# TETRIX MANIA
 
-One Paragraph of project description goes here
+Это свежий взгляд на всемирно известную и любимую с детства игру-головоломку. Складывайте падающие фигуры заполняя ими ряды, что бы расчистить поле и заработать очки. Чем больше рядов вы очистите за один раз, тем больше очков  заработаете.
 
-## Getting Started
+### Features:
+- New gaming experience with Full 3D and parallax.
+- Incredible visual effects.
+- 3 different game modes.
+- Leaderboard.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+### Platforms:
+- Android
 
-### Prerequisites
+### Core mechanic:
+Случайные фигуры, состоящие из блоков 1x1, падают сверху в прямоугольный стакан шириной 10x20 клеток. В полёте игрок может вращать фигуру на 90° и двигать её по горизонтали. Также можно ускорять её падение, когда уже решено, куда фигура должна упасть. Фигура падает до тех пор, пока не наткнётся на другую фигуру либо на дно стакана. Если при этом блоки заполнят горизонтальный ряд из 10 клеток, то этот ряд очищается, а все блоки, расположенные выше, опускаются на одну клетку ниже. При этом игроку начисляются очки. Чем больше рядов игрок очистит за один раз, тем больше очков он получит.
+Темп игры постепенно ускоряется. Игра заканчивается, когда новая фигура не может поместиться в стакан.
 
-What things you need to install the software and how to install them
+### Additional mechanics:
+- The player always sees the next 3 figures, which allows him to plan his actions.
+- Once per turn, a player can hold a figure or replace it with one held in previous moves.
+- Performing combos, the player receives bonuses that can be used at any time.
 
-```
-Give examples
-```
+### Game modes:
+- Classic - classic game with speed up.
+- Quick game - show the best result in 5 minutes.
+- Chill mode - without speed up and timer.
 
-### Installing
+### Score system:
+- 1 Line - 100 points.
+- 2 Lines - 300 points.
+- 3 Lines - 700 points.
+- 4 Lines - 1500 points.
 
-A step by step series of examples that tell you how to get a development env running
+### Combo and bonuses:
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+### Controls:
