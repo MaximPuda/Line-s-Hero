@@ -11,7 +11,7 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
-        activeBlock = blockController.GetaActiveBlock();
+        activeBlock = blockController.GetActiveBlock();
 
         Vector3 tempPos = Vector3.Lerp(mainCamera.position, new Vector3(activeBlock.position.x,
             mainCamera.position.y, mainCamera.position.z), speed * Time.deltaTime);

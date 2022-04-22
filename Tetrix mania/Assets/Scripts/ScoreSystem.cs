@@ -15,9 +15,10 @@ public class ScoreSystem : MonoBehaviour
     public TextMeshProUGUI resultScoreText;
     public UIController uiController;
 
-
     private static int lines;
     private static int score;
+
+    public int Lines { get { return lines; } }
 
     static void Start()
     {

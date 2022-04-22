@@ -6,9 +6,9 @@ public class Spawner2 : MonoBehaviour
     [SerializeField] private BlockController blockController;
     [SerializeField] private GameObject[] prefBlocks;
     [SerializeField] private GameObject[] prefSolidBlocks;
-    [SerializeField] private GameObject NextBlock_0;
-    [SerializeField] private GameObject NextBlock_1;
-    [SerializeField] private GameObject NextBlock_2;
+    [SerializeField] private GameObject nextBlock_0;
+    [SerializeField] private GameObject nextBlock_1;
+    [SerializeField] private GameObject nextBlock_2;
     [SerializeField] private Transform holdPosition;
 
     private GameObject activeBlock;
@@ -19,19 +19,19 @@ public class Spawner2 : MonoBehaviour
     private void Start()
     {
         nextBlocksIndex = new List<int>();
-        NextBlocks();
+        RefreshNextBlocks();
         SpawnNewBlock();
     }
 
-    private void NextBlocks()
+    private void RefreshNextBlocks()
     {
         while (nextBlocksIndex.Count < 3)
             nextBlocksIndex.Add(Random.Range(0, prefBlocks.Length));
 
         var nextBlockQuaternion = Quaternion.Euler(-90, 0, 0);
-        NextBlock_0 = Instantiate(prefSolidBlocks[nextBlocksIndex[0]], NextBlock_0.transform.position, nextBlockQuaternion);
-        NextBlock_1 = Instantiate(prefSolidBlocks[nextBlocksIndex[1]], NextBlock_1.transform.position, nextBlockQuaternion);
-        NextBlock_2 = Instantiate(prefSolidBlocks[nextBlocksIndex[2]], NextBlock_2.transform.position, nextBlockQuaternion);
+        nextBlock_0 = Instantiate(prefSolidBlocks[nextBlocksIndex[0]], nextBlock_0.transform.position, nextBlockQuaternion);
+        nextBlock_1 = Instantiate(prefSolidBlocks[nextBlocksIndex[1]], nextBlock_1.transform.position, nextBlockQuaternion);
+        nextBlock_2 = Instantiate(prefSolidBlocks[nextBlocksIndex[2]], nextBlock_2.transform.position, nextBlockQuaternion);
     }
 
     public void SpawnNewBlock()
@@ -40,11 +40,11 @@ public class Spawner2 : MonoBehaviour
         {
             activeBlock = Instantiate(prefBlocks[nextBlocksIndex[0]], transform.position, new Quaternion(0, 0, 0, 0));
             blockController.SetActiveBlock(activeBlock.transform);
-            Destroy(NextBlock_0);
-            Destroy(NextBlock_1);
-            Destroy(NextBlock_2);
+            Destroy(nextBlock_0);
+            Destroy(nextBlock_1);
+            Destroy(nextBlock_2);
             nextBlocksIndex.RemoveAt(0);
-            NextBlocks();
+            RefreshNextBlocks();
             isHolded = false;
         } 
     }

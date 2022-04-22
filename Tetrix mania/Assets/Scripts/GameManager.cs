@@ -1,16 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public ScoreSystem scoreSystem;
+    [SerializeField] private ScoreSystem scoreSystem;
+    [SerializeField] private UIController uiController;
+    [SerializeField] private Timer timer;
+    [SerializeField] private BlockController blockController;
 
     public static bool gamePaused;
     public static bool gameEnded;
 
-    public UIController uiController;
+    private void Awake()
+    {
+        timer.gameObject.SetActive(GameModeSettings.TimerActive);
+        BlockController.SpeedUpSetActive(GameModeSettings.SpeedLevelsActive);
+    }
 
     public void GameOver()
     {

@@ -8,14 +8,18 @@ public class BlockController : MonoBehaviour
     [SerializeField] private Effector effector;
     [SerializeField] private Spawner2 spawner;
 
-    [SerializeField] private float fallTime = 0.8f;
+    [SerializeField] private float fallTime = 1f;
     [SerializeField] private float horizontalMoveTime = 0.8f;
+    [SerializeField] private float speedCoef = 0.1f;
+    [SerializeField] private float fallingDownSpeed = 0.04f;
 
     private Transform activeBlockTransform;
     private Transform rotationPoint;
 
     private float previousTime;
     private float previousSideMoveTime;
+
+    private static bool speedUpActive;
 
     private static int height = 20;
     private static int width = 10;
@@ -50,7 +54,7 @@ public class BlockController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
                 Rotate();
 
-            if (Time.time - previousTime > ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) ? fallTime / 20 : fallTime))
+            if (Time.time - previousTime > ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) ? fallingDownSpeed : fallTime))
                 FallingDown();
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -250,6 +254,7 @@ public class BlockController : MonoBehaviour
             if (HasLine(row))
             {
                 scoreSystem.AddLines();
+                CheckLevelUp();
                 effector.PlayLineClearedParticles(row);
                 DeleteLine(row);
                 RowDown(row);
@@ -302,13 +307,38 @@ public class BlockController : MonoBehaviour
         rotationPoint = activeBlockTransform.GetChild(4);
     }
 
-    public Transform GetaActiveBlock()
+    public Transform GetActiveBlock()
     {
         return activeBlockTransform;
     }
 
-    public static void SpeedUp()
+    public static void SpeedUpSetActive(bool active)
     {
+        speedUpActive = active;
+    }
 
+    public void SpeedUp()
+    {
+        if (speedUpActive)
+        {
+            fallTime -= speedCoef;
+        }
+    }
+
+    public void SpeedDown()
+    {
+        if (speedUpActive)
+        {
+            fallTime += speedCoef;
+        }
+    }
+
+    private void CheckLevelUp()
+    {
+        if (speedUpActive && scoreSystem.Lines % 10 == 0)
+        {
+            SpeedUp();
+            Debug.Log("Speed UP!");
+        }
     }
 }
