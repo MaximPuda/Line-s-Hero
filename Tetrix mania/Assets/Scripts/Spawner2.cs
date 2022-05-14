@@ -6,6 +6,7 @@ public class Spawner2 : MonoBehaviour
     [SerializeField] private BlockController blockController;
     [SerializeField] private GameObject[] prefBlocks;
     [SerializeField] private GameObject[] prefSolidBlocks;
+
     [SerializeField] private GameObject nextBlock_0;
     [SerializeField] private GameObject nextBlock_1;
     [SerializeField] private GameObject nextBlock_2;
@@ -64,7 +65,7 @@ public class Spawner2 : MonoBehaviour
             var tempBlock = activeBlock;
 
             activeBlock = holdBlock;
-            activeBlock.transform.position = tempBlock.transform.position;
+            activeBlock.transform.position = transform.position;
             activeBlock.transform.localScale = tempBlock.transform.localScale;
 
             holdBlock = tempBlock;

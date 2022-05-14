@@ -1,35 +1,35 @@
 using UnityEngine;
+using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class BlockController : MonoBehaviour
 
 {
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private ScoreSystem scoreSystem;
-    [SerializeField] private Effector effector;
     [SerializeField] private Spawner2 spawner;
 
-    [SerializeField] private float fallTime = 1f;
+    [SerializeField] private float normalSpeed = 1f;
     [SerializeField] private float horizontalMoveTime = 0.8f;
-    [SerializeField] private float speedCoef = 0.1f;
     [SerializeField] private float fallingDownSpeed = 0.04f;
+    [SerializeField] private float swipeDeadZone = 60;
+
+    [SerializeField] private UnityEvent<float> OnHasLine;
+    [SerializeField] private UnityEvent<int> OnHasCombo;
 
     private Transform activeBlockTransform;
     private Transform rotationPoint;
 
     private float previousTime;
     private float previousSideMoveTime;
-
-    private static bool speedUpActive;
+    private bool isPressed;
 
     private static int height = 20;
     private static int width = 10;
 
     private static Transform[,] grid;
 
-    private float swipeDeadZone = 60;
     private Vector2 startSwipe;
 
-    public enum SwipeDirection {Left, Right, Up, Down}
     private SwipeDirection swipeDirection;
 
 
@@ -38,15 +38,19 @@ public class BlockController : MonoBehaviour
         grid = new Transform[width, height];
         swipeDirection = new SwipeDirection();
     }
+
     private void Update()
     {
         if (!GameManager.gamePaused && !GameManager.gameEnded && activeBlockTransform != null)
         {
+            if (Input.anyKeyDown)
+                isPressed = true;
+
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-                TurnLeft();
+                MoveLeft();
 
             if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-                TurnRight();
+                MoveRight();
 
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
                 spawner.Hold();
@@ -54,7 +58,7 @@ public class BlockController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
                 Rotate();
 
-            if (Time.time - previousTime > ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) ? fallingDownSpeed : fallTime))
+            if (Time.time - previousTime > (isPressed && (Input.GetKey(KeyCode.S)) ? fallingDownSpeed : normalSpeed))
                 FallingDown();
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -70,7 +74,11 @@ public class BlockController : MonoBehaviour
         Touch activeTouch = Input.GetTouch(0);
 
         if (activeTouch.phase == TouchPhase.Began)
+        {
             startSwipe = activeTouch.position;
+            isPressed = true;
+        }
+            
 
         if (activeTouch.phase == TouchPhase.Moved)
         {
@@ -80,7 +88,7 @@ public class BlockController : MonoBehaviour
                     {
                         if (activeTouch.position.x - startSwipe.x < -swipeDeadZone)
                         {
-                            TurnLeftSwipe();
+                            MoveLeftSwipe();
                             startSwipe = activeTouch.position;
                         }
 
@@ -90,18 +98,20 @@ public class BlockController : MonoBehaviour
                     {
                         if ((activeTouch.position.x - startSwipe.x) > swipeDeadZone)
                         {
-                            TurnRightSwipe();
+                            MoveRightSwipe();
                             startSwipe = activeTouch.position;
                         }
 
                         break;
                     }
                 case SwipeDirection.Up:
+                    if (activeTouch.position.y - startSwipe.y > swipeDeadZone)
+                        spawner.Hold();
                     break;
 
                 case SwipeDirection.Down:
                     {
-                        if (activeTouch.position.y - startSwipe.y < -swipeDeadZone)
+                        if (activeTouch.position.y - startSwipe.y < -swipeDeadZone && isPressed)
                             FallingDown();
                         break;
                     }
@@ -134,53 +144,120 @@ public class BlockController : MonoBehaviour
         return swipeDirection;
     }
 
-    private void TurnLeft()
+    private void MoveLeft()
     {
         if (Time.time - previousSideMoveTime > horizontalMoveTime / 10)
         {
             activeBlockTransform.position += Vector3.left;
                      
-            if (ValidMove())
+            if (!CanMove())
                 activeBlockTransform.position += Vector3.right;
 
             previousSideMoveTime = Time.time;
         }
     }
 
-    private void TurnLeftSwipe()
+    private void MoveLeftSwipe()
     {
         activeBlockTransform.position += Vector3.left;
 
-        if (ValidMove())
+        if (!CanMove())
             activeBlockTransform.position += Vector3.right;
     }
 
-    private void TurnRight()
+    private void MoveRight()
     {
         if (Time.time - previousSideMoveTime > horizontalMoveTime / 10)
         {
             activeBlockTransform.position += Vector3.right;
 
-            if (ValidMove())
+            if (!CanMove())
                 activeBlockTransform.position += Vector3.left;
 
             previousSideMoveTime = Time.time;
         }
     }
 
-    private void TurnRightSwipe()
+    private void MoveRightSwipe()
     {
         activeBlockTransform.position += Vector3.right;
 
-        if (ValidMove())
+        if (!CanMove())
             activeBlockTransform.position += Vector3.left;
     }
 
     private void Rotate()
     {
+        var savePosition = activeBlockTransform.position;
+        var saveRotation = activeBlockTransform.rotation;
+
         activeBlockTransform.RotateAround(rotationPoint.position, new Vector3(0, 0, 1), 90);
-        if (ValidMove())
-            activeBlockTransform.RotateAround(rotationPoint.position, new Vector3(0, 0, 1), -90);
+        var offset = GetRotationOffset();
+        activeBlockTransform.position += offset;
+
+            if (!CanMove())
+            {
+                activeBlockTransform.position = savePosition;
+                activeBlockTransform.rotation = saveRotation;
+            }
+    }
+
+    private Vector3 GetRotationOffset()
+    {
+        var offset = new Vector3();
+        var addedX = new List<int>();
+        bool flag = false;
+        
+        foreach  (Transform children in activeBlockTransform)
+        {
+            if (children.tag == "Cube")
+            {
+                int roundedX = Mathf.RoundToInt(children.position.x);
+                int roundedY = Mathf.RoundToInt(children.position.y);
+
+                if(addedX.Count > 0)
+                {
+                    for (int i = 0; i < addedX.Count; i++)
+                    {
+                        if (roundedX == addedX[i])
+                        {
+                            flag = true;
+                            break;
+                        }
+                        else
+                        {
+                            addedX.Add(roundedX);
+                            flag = false;
+                            break;
+                        }
+                    }
+                }
+                else
+                    addedX.Add(roundedX);
+
+
+                if (flag)
+                {
+                    flag = true;
+                    continue;
+                }
+
+                if (roundedY < 0)
+                    offset += Vector3.up;
+                else if (roundedY >= height)
+                        offset += Vector3.down;
+                else if (roundedX < 0)
+                    offset += Vector3.right;
+                else if (roundedX >= width)
+                    offset += Vector3.left;
+                else if (grid[roundedX, roundedY] != null && roundedX < rotationPoint.position.x)
+                    offset += Vector3.right;
+                else if (grid[roundedX, roundedY] != null && roundedX > rotationPoint.position.x)
+                    offset += Vector3.left;
+            }
+        }
+
+        return offset;
     }
 
     private void FallingDown()
@@ -188,11 +265,11 @@ public class BlockController : MonoBehaviour
         if (!GameManager.gameEnded)
         {
 
-            activeBlockTransform.position += new Vector3(0, -1, 0);
+            activeBlockTransform.position += Vector3.down;
 
-            if (ValidMove())
+            if (!CanMove())
             {
-                activeBlockTransform.position -= new Vector3(0, -1, 0);
+                activeBlockTransform.position += Vector3.up;
                 AddToGrid();
                 CheckForLines();
                 if(!GameManager.gameEnded)
@@ -208,7 +285,7 @@ public class BlockController : MonoBehaviour
 
     }
 
-    private bool ValidMove()
+    private bool CanMove()
     {
         foreach (Transform children in activeBlockTransform)
         {
@@ -218,14 +295,14 @@ public class BlockController : MonoBehaviour
                 int roundedY = Mathf.RoundToInt(children.position.y);
 
                 if (roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height)
-                    return true;
-
+                    return false;
+   
                 if (grid[roundedX, roundedY] != null)
-                    return true;
+                    return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     private void AddToGrid()
@@ -249,13 +326,11 @@ public class BlockController : MonoBehaviour
     {
         int combo = 0;
 
-        for (int row = height-1; row >= 0; row--)
+        for (int row = height - 1; row >= 0; row--)
         {
             if (HasLine(row))
             {
-                scoreSystem.AddLines();
-                CheckLevelUp();
-                effector.PlayLineClearedParticles(row);
+                OnHasLine.Invoke(row);
                 DeleteLine(row);
                 RowDown(row);
                 combo++;
@@ -263,7 +338,7 @@ public class BlockController : MonoBehaviour
         }
 
         if (combo > 0)
-            scoreSystem.CheckCombo(combo);
+            OnHasCombo.Invoke(combo);
     }
 
     private bool HasLine(int row)
@@ -305,6 +380,7 @@ public class BlockController : MonoBehaviour
     {
         activeBlockTransform = blockTransform;
         rotationPoint = activeBlockTransform.GetChild(4);
+        isPressed = false;
     }
 
     public Transform GetActiveBlock()
@@ -312,33 +388,10 @@ public class BlockController : MonoBehaviour
         return activeBlockTransform;
     }
 
-    public static void SpeedUpSetActive(bool active)
+    public void SetSpeed(float newSpeed)
     {
-        speedUpActive = active;
-    }
-
-    public void SpeedUp()
-    {
-        if (speedUpActive)
-        {
-            fallTime -= speedCoef;
-        }
-    }
-
-    public void SpeedDown()
-    {
-        if (speedUpActive)
-        {
-            fallTime += speedCoef;
-        }
-    }
-
-    private void CheckLevelUp()
-    {
-        if (speedUpActive && scoreSystem.Lines % 10 == 0)
-        {
-            SpeedUp();
-            Debug.Log("Speed UP!");
-        }
+        normalSpeed = newSpeed;
     }
 }
+
+public enum SwipeDirection { Left, Right, Up, Down }

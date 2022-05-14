@@ -11,7 +11,6 @@ public class MainMenuManager : MonoBehaviour
 
     void Start()
     {
-        playerName.text = PlayerStatic.PlayerName;
         lines.text = PlayerStatic.AllLineCleared.ToString();
         bestScore.text = PlayerStatic.BestScore.ToString();
     }

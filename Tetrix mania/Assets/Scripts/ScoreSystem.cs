@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 
 public class ScoreSystem : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class ScoreSystem : MonoBehaviour
     public TextMeshProUGUI resultLinesText;
     public TextMeshProUGUI resultScoreText;
     public UIController uiController;
+
+    [SerializeField] private UnityEvent OnLevelUp;
+    [SerializeField] private UnityEvent<int> OnAddLines;
 
     private static int lines;
     private static int score;
@@ -35,6 +39,7 @@ public class ScoreSystem : MonoBehaviour
     {
         lines++;
         OutScoreToHud();
+        OnAddLines.Invoke(lines);
     }
 
     private void OutScoreToHud()

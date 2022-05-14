@@ -6,16 +6,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ScoreSystem scoreSystem;
     [SerializeField] private UIController uiController;
     [SerializeField] private Timer timer;
-    [SerializeField] private BlockController blockController;
 
     public static bool gamePaused;
     public static bool gameEnded;
-
-    private void Awake()
-    {
-        timer.gameObject.SetActive(GameModeSettings.TimerActive);
-        BlockController.SpeedUpSetActive(GameModeSettings.SpeedLevelsActive);
-    }
 
     public void GameOver()
     {

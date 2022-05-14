@@ -10,19 +10,21 @@ public class Timer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private Slider slider;
     [SerializeField] private UnityEvent onStopTimer;
-    
 
     private bool isRunning;
     private float time;
 
     private void Start()
     {
-        timerText.gameObject.SetActive(true);
-        slider.gameObject.SetActive(true);
+        if (GameModeSettings.TimerActive)
+        {
+            timerText.gameObject.SetActive(true);
+            slider.gameObject.SetActive(true);
 
-        time = minutes * 60;
-        slider.maxValue = time;
-        StartTimer();
+            time = minutes * 60;
+            slider.maxValue = time;
+            StartTimer();
+        }
     }
 
     private void Update()
