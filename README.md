@@ -1,6 +1,6 @@
 # TETRIX MANIA
 
-Это свежий взгляд на всемирно известную и любимую с детства игру-головоломку. Складывайте падающие фигуры заполняя ими ряды, что бы расчистить поле и заработать очки. Чем больше рядов вы очистите за один раз, тем больше очков  заработаете.
+This is a fresh look at the world-famous and beloved puzzle game from childhood. Stack the falling figures by filling the rows with them to clear the field and earn points. The more rows you clear at a time, the more points you earn.
 
 ### Features:
 - New gaming experience with Full 3D and parallax.
@@ -9,11 +9,11 @@
 - Leaderboard.
 
 ### Platforms:
-- Android
+- Android, iOS.
 
 ### Core mechanic:
-Случайные фигуры, состоящие из блоков 1x1, падают сверху в прямоугольный стакан шириной 10x20 клеток. В полёте игрок может вращать фигуру на 90° и двигать её по горизонтали. Также можно ускорять её падение, когда уже решено, куда фигура должна упасть. Фигура падает до тех пор, пока не наткнётся на другую фигуру либо на дно стакана. Если при этом блоки заполнят горизонтальный ряд из 10 клеток, то этот ряд очищается, а все блоки, расположенные выше, опускаются на одну клетку ниже. При этом игроку начисляются очки. Чем больше рядов игрок очистит за один раз, тем больше очков он получит.
-Темп игры постепенно ускоряется. Игра заканчивается, когда новая фигура не может поместиться в стакан.
+Random figures consisting of 1x1 blocks fall from above into a rectangular glass with a width of 10x20 cells. In flight, the player can rotate the figure by 90 ° and move it horizontally. You can also accelerate its fall when it has already been decided where the figure should fall. The figure falls until it hits another figure or the bottom of the glass. If at the same time the blocks fill a horizontal row of 10 cells, then this row is cleared, and all the blocks located above are lowered one cell below. In this case, the player is awarded points. The more rows a player clears at a time, the more points he will get.
+The pace of the game gradually accelerates. The game ends when a new figure cannot fit into the glass.
 
 ### Additional mechanics:
 - The player always sees the next 3 figures, which allows him to plan his actions.
@@ -34,3 +34,8 @@
 ### Combo and bonuses:
 
 ### Controls:
+- Swipe left - move left.
+- Swipe right - move right.
+- Swipe up - hold.
+- Swipe down - drop figure.
+- Tap -  rotate figure.
