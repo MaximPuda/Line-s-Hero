@@ -12,27 +12,38 @@ public class ScoreSystem : MonoBehaviour
 
     public TextMeshProUGUI linesText;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI bestScoreText;
     public TextMeshProUGUI resultLinesText;
     public TextMeshProUGUI resultScoreText;
     public UIController uiController;
 
-    [SerializeField] private UnityEvent OnLevelUp;
     [SerializeField] private UnityEvent<int> OnAddLines;
+    [SerializeField] private UnityEvent OnBestScore;
+    [SerializeField] private UnityEvent OnTetrix;
 
-    private static int lines;
-    private static int score;
+    private int lines = 0;
+    private int score = 0;
+    private int bestScore = 0;
+    private bool isBest = false;
 
-    public int Lines { get { return lines; } }
-
-    static void Start()
+    private  void Start()
     {
-        ResetScore();
+        bestScore = Player.GetBestScore(GameModeSettings.mode);
+        OutScoreToHud();
     }
 
-    public static void ResetScore()
+    private void AddPoints(int points)
     {
-        lines = 0;
-        score = 0;
+        score += points;
+        CheckBestScore();
+        OutScoreToHud();
+    }
+
+    private void OutScoreToHud()
+    {
+        linesText.text = lines.ToString();
+        scoreText.text = score.ToString();
+        bestScoreText.text = bestScore.ToString();
     }
 
     public void AddLines()
@@ -40,18 +51,6 @@ public class ScoreSystem : MonoBehaviour
         lines++;
         OutScoreToHud();
         OnAddLines.Invoke(lines);
-    }
-
-    private void OutScoreToHud()
-    {
-       linesText.text = Convert.ToString(lines);
-       scoreText.text = Convert.ToString(score);
-    }
-
-    public void OutScoreToGameOverScreen()
-    {
-        resultScoreText.text = Convert.ToString(score);
-        resultLinesText.text = String.Format("You cleared {0} lines", lines);
     }
 
     public void CheckCombo(int numberOfLines)
@@ -72,6 +71,7 @@ public class ScoreSystem : MonoBehaviour
 
             case 4:
                 AddPoints(scoreFourLine);
+                OnTetrix.Invoke();
                 uiController.PlayTetris();
                 break;
                 
@@ -80,15 +80,25 @@ public class ScoreSystem : MonoBehaviour
         }
         
     }
-    private void AddPoints(int points)
+
+    public void CheckBestScore()
     {
-        score += points;
-        OutScoreToHud();
+        if(score > bestScore)
+        {
+            bestScore = score;
+
+            if (!isBest)
+            {
+                isBest = true;
+                OnBestScore.Invoke();
+            }
+        }
     }
 
-    public static void GetResult()
+    public void GetFinalResult()
     {
-        PlayerStatic.BestScore = score;
-        PlayerStatic.AllLineCleared = lines;
+        resultScoreText.text = score.ToString();
+        resultLinesText.text = String.Format("You cleared {0} lines", lines);
+        Player.SetBestScore(GameModeSettings.mode, bestScore);
     }
 }

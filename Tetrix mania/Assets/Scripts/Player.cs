@@ -1,50 +1,79 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+[System.Serializable]
+public static class Player
 {
-    [SerializeField] private string playerName;
-    [SerializeField] private int bestScore;
-    [SerializeField] private int allLinesCleared;
+    public static string playerName;
+    public static string[] modes;
+    public static int[] bestScores;
+    public static int allLinesCount;
 
-    public string PlayerName
+    public static void Save()
     {
-        get { return playerName; }
-        set { playerName = value; }
+        FileManager.SaveToFile();
     }
-    public int BestScore
+
+    public static bool Load()
     {
-        get { return bestScore; }
-        set 
+        var save = FileManager.LoadFromFile();
+        if(save != null)
         {
-            if(bestScore < value)
-                bestScore = value;
+            playerName = save.playerName;
+            modes = save.modes;
+            bestScores = save.bestScores;
+            allLinesCount = save.allLinesCount;
+            return true;
         }
-    }
-    public int AllLineCleared
-    {
-        get { return allLinesCleared; }
-        set { allLinesCleared += value; }
+        else return false;
     }
 
-    public void SavePlayer()
+    public static void Reset()
     {
-        //SaveSystem.SavePlayer(this);
+        var gameModes = GameObject.FindObjectOfType<GameModeChanger>().modes;
+        modes = new string[gameModes.Length];
+        bestScores = new int[gameModes.Length];
+
+        for (int i = 0; i < modes.Length; i++)
+            modes[i] = gameModes[i].modeName;
+
+        playerName = "Player";
+        allLinesCount = 0;
+
+        Save();
     }
 
-    public void LoadPlayer()
+    public static int GetBestScore(string mode)
     {
-        PlayerData data = SaveSystem.LoadPlayer();
-        if (data != null)
+        var index = GetIndexOfMode(mode);
+        if (index != -1)
         {
-            playerName = data.playerName;
-            bestScore = data.bestScore;
-            allLinesCleared = data.allLineCleared;
+            return bestScores[index];
         }
-        
+ 
+        return 0;
     }
 
-    public void DeletePlayer()
+    public static void SetBestScore(string mode, int score)
     {
-        SaveSystem.DeleteSaveFile();
+        var index = GetIndexOfMode(mode);
+        if (index != -1)
+        {
+            bestScores[index] = score;
+            Save();
+        }
+        else
+            Debug.Log("Game mode not found!");
+    }
+
+    private static int GetIndexOfMode(string mode)
+    {
+        int index = -1;
+        for (int i = 0; i < modes.Length; i++)
+        {
+            if (modes[i].Contains(mode))
+                index = i;
+        }
+
+        return index;
     }
 }

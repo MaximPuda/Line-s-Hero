@@ -9,11 +9,12 @@ public class SpeedController : MonoBehaviour
     [SerializeField] private ScoreSystem scoreSystem;
     [SerializeField] private TextMeshProUGUI speedText;
     [SerializeField] private UnityEvent<float> OnSpeedChange;
-    [SerializeField] private int linesToSpeedUp = 10;
+    [SerializeField] private UnityEvent<string> ShowMessage;
 
     private bool isActive;
     private int speedLevel = 0;
     private float speedCoef;
+    private int linesToSpeedUp;
     private float startSpeed = 1;
     private float newSpeed;
     private List<float> previousSpeeds;
@@ -22,11 +23,10 @@ public class SpeedController : MonoBehaviour
 
     private void Start()
     {
-        isActive = GameModeSettings.SpeedLevelsActive;
+        isActive = GameModeSettings.speedLevelsActive;
         speedCoef = GameModeSettings.speedCoef;
+        linesToSpeedUp = GameModeSettings.linesToSpeedUp;
         previousSpeeds = new List<float>();
-
-        Debug.Log($"Speed Coef:  {speedCoef}");
     }
 
     public void CheckLevelUp(int lines)
@@ -55,8 +55,8 @@ public class SpeedController : MonoBehaviour
             speedLevel++;
 
             OnSpeedChange.Invoke(newSpeed);
+            ShowMessage.Invoke("SPEED UP");
             speedText.text = speedLevel.ToString();
-            Debug.Log($"New speed: {newSpeed}");
         }
     }
 
@@ -71,6 +71,7 @@ public class SpeedController : MonoBehaviour
                 previousSpeeds.RemoveAt(previousSpeeds.Count - 1);
 
                 OnSpeedChange.Invoke(newSpeed);
+                ShowMessage.Invoke("SPEED DOWN");
                 speedText.text = speedLevel.ToString();
                 Debug.Log($"New speed: {newSpeed}");
             }

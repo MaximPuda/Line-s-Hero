@@ -27,14 +27,14 @@ public class SceneController : MonoBehaviour
 
     public void LoadStartGameScene()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
         GameManager.StartGame();
         Time.timeScale = 1;
     }
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
         Time.timeScale = 1;
     }
 }

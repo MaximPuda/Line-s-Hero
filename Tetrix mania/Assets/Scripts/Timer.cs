@@ -16,7 +16,7 @@ public class Timer : MonoBehaviour
 
     private void Start()
     {
-        if (GameModeSettings.TimerActive)
+        if (GameModeSettings.timerActive)
         {
             timerText.gameObject.SetActive(true);
             slider.gameObject.SetActive(true);
@@ -34,13 +34,13 @@ public class Timer : MonoBehaviour
             if (time > 1)
             {
                 time -= Time.deltaTime;
-                UpdateTimerLabel();
+                UpdateTimerText();
             }
             else StopTimer();
         }
     }
 
-    private void UpdateTimerLabel()
+    private void UpdateTimerText()
     {
         var minutes = Mathf.FloorToInt(time / 60);
         var seconds = Mathf.FloorToInt(time % 60);

@@ -1,8 +1,9 @@
 public static class GameModeSettings
 {
-    public static string Mode;
-    public static bool TimerActive = false;
-    public static bool SpeedLevelsActive = false;
+    public static string mode;
+    public static bool timerActive = false;
+    public static bool speedLevelsActive = false;
+    public static int linesToSpeedUp;
     public static float speedCoef;
 }
 

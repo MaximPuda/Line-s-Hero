@@ -2,25 +2,14 @@ using UnityEngine;
 
 public class GameModeChanger : MonoBehaviour
 {
-    public void SetClassicMode()
-    {
-        GameModeSettings.Mode = "Classic";
-        GameModeSettings.SpeedLevelsActive = true;
-        GameModeSettings.speedCoef = 0.15f;
-    }
+    [SerializeField] public GameMode[] modes;
 
-    public void SetQuickMode()
+    public void SetGameMode(int index)
     {
-        GameModeSettings.Mode = "Quick";
-        GameModeSettings.SpeedLevelsActive = true;
-        GameModeSettings.TimerActive = true;
-        GameModeSettings.speedCoef = 0.3f;
-    }
-
-    public void SetChillMode()
-    {
-        GameModeSettings.Mode = "Chill";
-        GameModeSettings.SpeedLevelsActive = false;
-        GameModeSettings.TimerActive = false;
+        GameModeSettings.mode = modes[index].name;
+        GameModeSettings.speedLevelsActive = modes[index].speedLevelsActive;
+        GameModeSettings.linesToSpeedUp = modes[index].linesToSpeedUp;
+        GameModeSettings.timerActive = modes[index].timerActive;
+        GameModeSettings.speedCoef = modes[index].speedCoef;
     }
 }

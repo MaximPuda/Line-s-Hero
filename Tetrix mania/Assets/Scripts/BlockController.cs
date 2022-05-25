@@ -12,14 +12,19 @@ public class BlockController : MonoBehaviour
     [SerializeField] private float horizontalMoveTime = 0.8f;
     [SerializeField] private float fallingDownSpeed = 0.04f;
     [SerializeField] private float swipeDeadZone = 60;
+    [SerializeField] private TrailHandler trail;
 
     [SerializeField] private UnityEvent<float> OnHasLine;
+    [SerializeField] private UnityEvent OnBlockGrounded;
+    [SerializeField] private UnityEvent OnRotate;
+    [SerializeField] private UnityEvent OnMove;
     [SerializeField] private UnityEvent<int> OnHasCombo;
 
     private Transform activeBlockTransform;
     private Transform rotationPoint;
 
     private float previousTime;
+    private float activeSpeed;
     private float previousSideMoveTime;
     private bool isPressed;
 
@@ -29,22 +34,35 @@ public class BlockController : MonoBehaviour
     private static Transform[,] grid;
 
     private Vector2 startSwipe;
-
-    private SwipeDirection swipeDirection;
+    private bool isSwipeMoved;
 
 
     private void Awake()
     {
         grid = new Transform[width, height];
-        swipeDirection = new SwipeDirection();
+        activeSpeed = normalSpeed;
     }
 
     private void Update()
     {
-        if (!GameManager.gamePaused && !GameManager.gameEnded && activeBlockTransform != null)
+        if (!GameManager.isGamePaused && !GameManager.isGameEnded && activeBlockTransform != null)
         {
             if (Input.anyKeyDown)
                 isPressed = true;
+
+            if (isPressed && (Input.GetKey(KeyCode.S)))
+            {
+                trail.EmissionEnable();
+                activeSpeed = fallingDownSpeed;
+            }
+            else if (Input.GetKeyUp(KeyCode.S))
+            {
+                trail.EmissionDesable();
+                activeSpeed = normalSpeed;
+            }
+
+            if (Time.time - previousTime > activeSpeed)
+                FallingDown();
 
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
                 MoveLeft();
@@ -57,9 +75,6 @@ public class BlockController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
                 Rotate();
-
-            if (Time.time - previousTime > (isPressed && (Input.GetKey(KeyCode.S)) ? fallingDownSpeed : normalSpeed))
-                FallingDown();
 
             if (Input.GetKeyDown(KeyCode.Escape))
                 gameManager.Pause();
@@ -77,71 +92,80 @@ public class BlockController : MonoBehaviour
         {
             startSwipe = activeTouch.position;
             isPressed = true;
+            isSwipeMoved = false;
         }
-            
 
-        if (activeTouch.phase == TouchPhase.Moved)
+        if(activeTouch.phase == TouchPhase.Moved)
         {
             switch (GetSwipeDirection(activeTouch))
             {
                 case SwipeDirection.Left:
-                    {
-                        if (activeTouch.position.x - startSwipe.x < -swipeDeadZone)
-                        {
-                            MoveLeftSwipe();
-                            startSwipe = activeTouch.position;
-                        }
+                    MoveLeftSwipe();
+                    startSwipe = activeTouch.position;
+                    isSwipeMoved = true;
+                    break;
 
-                        break;
-                    }
                 case SwipeDirection.Right:
-                    {
-                        if ((activeTouch.position.x - startSwipe.x) > swipeDeadZone)
-                        {
-                            MoveRightSwipe();
-                            startSwipe = activeTouch.position;
-                        }
+                    MoveRightSwipe();
+                    startSwipe = activeTouch.position;
+                    isSwipeMoved = true;
+                    break;
 
-                        break;
-                    }
                 case SwipeDirection.Up:
-                    if (activeTouch.position.y - startSwipe.y > swipeDeadZone)
-                        spawner.Hold();
+                    spawner.Hold();
+                    isSwipeMoved = true;
                     break;
 
                 case SwipeDirection.Down:
+                    if (isPressed)
                     {
-                        if (activeTouch.position.y - startSwipe.y < -swipeDeadZone && isPressed)
-                            FallingDown();
-                        break;
+                        trail.EmissionEnable();
+                        activeSpeed = fallingDownSpeed;
+                        isSwipeMoved = true;
                     }
-                    
+                    break;
+
                 default:
                     break;
             }
         }
 
-        if(activeTouch.phase == TouchPhase.Ended || activeTouch.phase == TouchPhase.Canceled)
+        if (activeTouch.phase == TouchPhase.Ended || activeTouch.phase == TouchPhase.Canceled)
         {
-            if (activeTouch.position.x - startSwipe.x == 0 && activeTouch.position.y - startSwipe.y == 0)
+            if (!isSwipeMoved && Mathf.Abs(activeTouch.position.x - startSwipe.x) < swipeDeadZone
+                && Mathf.Abs(activeTouch.position.y - startSwipe.y) < swipeDeadZone)
                 Rotate();
+
+            trail.EmissionDesable();
+            activeSpeed = normalSpeed;
         }
     }
 
     private SwipeDirection GetSwipeDirection(Touch touch)
     {
-        if (Mathf.Abs(touch.position.x - startSwipe.x) > Mathf.Abs(touch.position.y - startSwipe.y))
-            if (touch.position.x - startSwipe.x < 0)
-                swipeDirection = SwipeDirection.Left;
-            else
-                swipeDirection = SwipeDirection.Right;
-        else if (Mathf.Abs(touch.position.x - startSwipe.x) < Mathf.Abs(touch.position.y - startSwipe.y))
-            if (touch.position.y - startSwipe.y < 0)
-                swipeDirection = SwipeDirection.Down;
-            else
-                swipeDirection = SwipeDirection.Up;
+        var deltaX = touch.position.x - startSwipe.x;
+        var deltaY = touch.position.y - startSwipe.y;
+        var absDeltaX = Mathf.Abs(deltaX);
+        var absDeltaY = Mathf.Abs(deltaY);
+
+
+        if (absDeltaX > absDeltaY && absDeltaX > swipeDeadZone)
+        {
+            if (deltaX < 0)
+                return SwipeDirection.Left;
+            
+            return SwipeDirection.Right;
+        }
+        
+        if (absDeltaY > absDeltaX && absDeltaY > swipeDeadZone)
+        {
+            if (deltaY < 0)
+                return SwipeDirection.Down;
+            
+            return SwipeDirection.Up;
+        }
  
-        return swipeDirection;
+        return SwipeDirection.Tap;
     }
 
     private void MoveLeft()
@@ -149,9 +173,11 @@ public class BlockController : MonoBehaviour
         if (Time.time - previousSideMoveTime > horizontalMoveTime / 10)
         {
             activeBlockTransform.position += Vector3.left;
-                     
+
             if (!CanMove())
                 activeBlockTransform.position += Vector3.right;
+            else
+                OnMove.Invoke();
 
             previousSideMoveTime = Time.time;
         }
@@ -163,6 +189,8 @@ public class BlockController : MonoBehaviour
 
         if (!CanMove())
             activeBlockTransform.position += Vector3.right;
+        else
+            OnMove.Invoke();
     }
 
     private void MoveRight()
@@ -173,6 +201,8 @@ public class BlockController : MonoBehaviour
 
             if (!CanMove())
                 activeBlockTransform.position += Vector3.left;
+            else
+                OnMove.Invoke();
 
             previousSideMoveTime = Time.time;
         }
@@ -184,6 +214,8 @@ public class BlockController : MonoBehaviour
 
         if (!CanMove())
             activeBlockTransform.position += Vector3.left;
+        else
+            OnMove.Invoke();
     }
 
     private void Rotate()
@@ -195,11 +227,14 @@ public class BlockController : MonoBehaviour
         var offset = GetRotationOffset();
         activeBlockTransform.position += offset;
 
-            if (!CanMove())
-            {
-                activeBlockTransform.position = savePosition;
-                activeBlockTransform.rotation = saveRotation;
-            }
+        if (!CanMove())
+        {
+            activeBlockTransform.position = savePosition;
+            activeBlockTransform.rotation = saveRotation;
+        }
+        else
+            OnRotate.Invoke();
+
     }
 
     private Vector3 GetRotationOffset()
@@ -262,7 +297,7 @@ public class BlockController : MonoBehaviour
 
     private void FallingDown()
     {
-        if (!GameManager.gameEnded)
+        if (!GameManager.isGameEnded)
         {
 
             activeBlockTransform.position += Vector3.down;
@@ -272,7 +307,7 @@ public class BlockController : MonoBehaviour
                 activeBlockTransform.position += Vector3.up;
                 AddToGrid();
                 CheckForLines();
-                if(!GameManager.gameEnded)
+                if(!GameManager.isGameEnded)
                     spawner.SpawnNewBlock();
                 else
                     gameManager.GameOver();
@@ -315,9 +350,12 @@ public class BlockController : MonoBehaviour
                 int roundedY = Mathf.RoundToInt(children.position.y);
 
                 if (roundedY < grid.GetLength(1)-1)
+                {
+                    OnBlockGrounded.Invoke();
                     grid[roundedX, roundedY] = children;
+                }
                 else
-                    GameManager.gameEnded = true;
+                    GameManager.isGameEnded = true;
             }
         }
     }
@@ -380,6 +418,8 @@ public class BlockController : MonoBehaviour
     {
         activeBlockTransform = blockTransform;
         rotationPoint = activeBlockTransform.GetChild(4);
+        trail.EmissionDesable();
+        trail.SetActiveBlock(blockTransform);
         isPressed = false;
     }
 
@@ -394,4 +434,4 @@ public class BlockController : MonoBehaviour
     }
 }
 
-public enum SwipeDirection { Left, Right, Up, Down }
+public enum SwipeDirection { Left, Right, Up, Down, Tap }

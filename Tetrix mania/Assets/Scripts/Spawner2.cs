@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Spawner2 : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Spawner2 : MonoBehaviour
     [SerializeField] private GameObject nextBlock_1;
     [SerializeField] private GameObject nextBlock_2;
     [SerializeField] private Transform holdPosition;
+    [SerializeField] private UnityEvent onHold;
 
     private GameObject activeBlock;
     private List<int> nextBlocksIndex;
@@ -54,14 +56,15 @@ public class Spawner2 : MonoBehaviour
     {
         if (holdBlock == null)
         {
+            onHold.Invoke();
             holdBlock = activeBlock;
             HoldBlockTransform();
-            isHolded = true;
-
             SpawnNewBlock();
+            isHolded = true;
         }
         else if(!isHolded)
         {
+            onHold.Invoke();
             var tempBlock = activeBlock;
 
             activeBlock = holdBlock;

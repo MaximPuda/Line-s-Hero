@@ -1,40 +1,21 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private ScoreSystem scoreSystem;
     [SerializeField] private UIController uiController;
-    [SerializeField] private Timer timer;
+    [SerializeField] private AudioController musicPlayer;
 
-    public static bool gamePaused;
-    public static bool gameEnded;
+    public static bool isGamePaused;
+    public static bool isGameEnded;
 
-    public void GameOver()
+    public static void StartGame()
     {
-        uiController.PlayGameOverOpen();
-        gameEnded = true;
-        scoreSystem.OutScoreToGameOverScreen();
-        ScoreSystem.GetResult();
-        PlayerStatic.SavePlayer();
+        isGameEnded = false;
+        isGamePaused = false;
     }
-
-    public void Pause()
-    {
-        if (!gamePaused)
-        {
-            Time.timeScale = 0;
-            gamePaused = true;
-            uiController.PlayPauseOpen();
-        }
-        else
-        {
-            Time.timeScale = 1;
-            gamePaused = false;
-            uiController.PlayPauseClose();
-        }
-    }
-
     public void Restart()
     {
         StartGame();
@@ -42,10 +23,29 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    public static void StartGame()
+    public void GameOver()
     {
-        gameEnded = false;
-        gamePaused = false;
-        ScoreSystem.ResetScore();
+        musicPlayer.StopMusic();
+        uiController.PlayGameOverOpen();
+        isGameEnded = true;
+        scoreSystem.GetFinalResult();
+    }
+
+    public void Pause()
+    {
+        if (!isGamePaused)
+        {
+            Time.timeScale = 0;
+            musicPlayer.PauseMusic();
+            isGamePaused = true;
+            uiController.PlayPauseOpen();
+        }
+        else
+        {
+            Time.timeScale = 1;
+            musicPlayer.PlayMusic();
+            isGamePaused = false;
+            uiController.PlayPauseClose();
+        }
     }
 }

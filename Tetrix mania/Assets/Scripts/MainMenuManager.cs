@@ -5,18 +5,14 @@ using TMPro;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public TextMeshProUGUI playerName;
-    public TextMeshProUGUI lines;
-    public TextMeshProUGUI bestScore;
-
     void Start()
     {
-        lines.text = PlayerStatic.AllLineCleared.ToString();
-        bestScore.text = PlayerStatic.BestScore.ToString();
+        if (!Player.Load())
+            Player.Reset();
     }
 
     public void DeleteSaveFile()
     {
-        SaveSystem.DeleteSaveFile();
+        FileManager.DeleteSaveFile();
     }
 }

@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Effector : MonoBehaviour
 {
-    public ParticleSystem[] lineClearedParticles;
+    [SerializeField] private ParticleSystem[] lineClearedParticles;
+    [SerializeField] private ParticleSystem ComboParticles;
 
     public void PlayLineClearedParticles(float lineY)
     {
@@ -13,5 +14,10 @@ public class Effector : MonoBehaviour
                 lineClearedParticles[i].Play();
                 break;
             }
+    }
+
+    public void PlayComboParticles()
+    {
+        ComboParticles.Play();
     }
 }

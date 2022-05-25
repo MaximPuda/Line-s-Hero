@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
@@ -7,6 +8,11 @@ public class UIController : MonoBehaviour
     [SerializeField] private Animator fxAnimator;
 
     [SerializeField] private Canvas hudCanvas;
+
+    [Header("Messsages")]
+    [SerializeField] private Animator messageAnimator;
+    [SerializeField] private TMP_Text message;
+    [SerializeField] private TMP_Text messageBack;
 
     public void PlayPauseOpen()
     {
@@ -28,5 +34,13 @@ public class UIController : MonoBehaviour
     public void PlayTetris()
     {
         fxAnimator.SetTrigger("Tetris");
+    }
+
+    public void ShowMessage(string message)
+    {
+        this.message.text = message;
+        messageBack.text = message;
+
+        messageAnimator.SetTrigger("ShowMessage");
     }
 }

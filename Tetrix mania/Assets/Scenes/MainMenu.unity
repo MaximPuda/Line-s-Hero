@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.08724781, g: 0.022757627, b: 0.12942407, a: 1}
+  m_IndirectSpecularColor: {r: 0.06456123, g: 0.022828337, b: 0.114884965, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -951,12 +951,12 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 704270678}
         m_TargetAssemblyTypeName: GameModeChanger, Assembly-CSharp
-        m_MethodName: SetChillMode
-        m_Mode: 1
+        m_MethodName: SetGameMode
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1547,12 +1547,12 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 704270678}
         m_TargetAssemblyTypeName: GameModeChanger, Assembly-CSharp
-        m_MethodName: SetQuickMode
-        m_Mode: 1
+        m_MethodName: SetGameMode
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2199,6 +2199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e1d2d40ab5c7b479644df9c1856b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modes:
+  - {fileID: 11400000, guid: a928d55945fc9c246a55003f99685f7d, type: 2}
+  - {fileID: 11400000, guid: ad9c8808c4f925b41a4baf2e9a49a6ac, type: 2}
+  - {fileID: 11400000, guid: 00ed6c931bd5eac4ca464267dc0fc52a, type: 2}
 --- !u!4 &704270679
 Transform:
   m_ObjectHideFlags: 0
@@ -9069,8 +9073,8 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 704270678}
         m_TargetAssemblyTypeName: GameModeChanger, Assembly-CSharp
-        m_MethodName: SetClassicMode
-        m_Mode: 1
+        m_MethodName: SetGameMode
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -10106,9 +10110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a194fae911d4648a974f61b15dcede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: {fileID: 0}
-  lines: {fileID: 975416594}
-  bestScore: {fileID: 484183722}
 --- !u!4 &1618751339
 Transform:
   m_ObjectHideFlags: 0
