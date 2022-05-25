@@ -47,13 +47,14 @@ public class BlockController : MonoBehaviour
     {
         if (!GameManager.isGamePaused && !GameManager.isGameEnded && activeBlockTransform != null)
         {
-            if (Input.anyKeyDown)
-                isPressed = true;
+            if (Input.GetKeyDown(KeyCode.S))
+               isPressed = true;
 
             if (isPressed && (Input.GetKey(KeyCode.S)))
             {
                 trail.EmissionEnable();
                 activeSpeed = fallingDownSpeed;
+                isPressed = false;
             }
             else if (Input.GetKeyUp(KeyCode.S))
             {
@@ -122,6 +123,7 @@ public class BlockController : MonoBehaviour
                         trail.EmissionEnable();
                         activeSpeed = fallingDownSpeed;
                         isSwipeMoved = true;
+                        isPressed = false;
                     }
                     break;
 
@@ -421,6 +423,7 @@ public class BlockController : MonoBehaviour
         trail.EmissionDesable();
         trail.SetActiveBlock(blockTransform);
         isPressed = false;
+        activeSpeed = normalSpeed;
     }
 
     public Transform GetActiveBlock()
@@ -431,6 +434,7 @@ public class BlockController : MonoBehaviour
     public void SetSpeed(float newSpeed)
     {
         normalSpeed = newSpeed;
+        activeSpeed = normalSpeed;
     }
 }
 
