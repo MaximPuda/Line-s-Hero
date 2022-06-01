@@ -13,6 +13,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void DeleteSaveFile()
     {
-        FileManager.DeleteSaveFile();
+        Player.Reset();
     }
 }

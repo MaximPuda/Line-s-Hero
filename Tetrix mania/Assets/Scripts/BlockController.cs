@@ -7,13 +7,17 @@ public class BlockController : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Spawner2 spawner;
+    [SerializeField] private TrailHandler trail;
 
+    [Header("Movement")]
     [SerializeField] private float normalSpeed = 1f;
     [SerializeField] private float horizontalMoveTime = 0.8f;
     [SerializeField] private float fallingDownSpeed = 0.04f;
-    [SerializeField] private float swipeDeadZone = 60;
-    [SerializeField] private TrailHandler trail;
+    [SerializeField] private float verticalDeadZone = 80;
+    [SerializeField] private float horizontalDeadZone = 120;
+    [SerializeField, Range(1, 3)] private float sens = 2;
 
+    [Header("Events")]
     [SerializeField] private UnityEvent<float> OnHasLine;
     [SerializeField] private UnityEvent OnBlockGrounded;
     [SerializeField] private UnityEvent OnRotate;
@@ -41,6 +45,7 @@ public class BlockController : MonoBehaviour
     {
         grid = new Transform[width, height];
         activeSpeed = normalSpeed;
+        SetSens(PlayerPrefs.GetFloat("Sens"));
     }
 
     private void Update()
@@ -134,8 +139,8 @@ public class BlockController : MonoBehaviour
 
         if (activeTouch.phase == TouchPhase.Ended || activeTouch.phase == TouchPhase.Canceled)
         {
-            if (!isSwipeMoved && Mathf.Abs(activeTouch.position.x - startSwipe.x) < swipeDeadZone
-                && Mathf.Abs(activeTouch.position.y - startSwipe.y) < swipeDeadZone)
+            if (!isSwipeMoved && Mathf.Abs(activeTouch.position.x - startSwipe.x) < horizontalDeadZone / sens
+                && Mathf.Abs(activeTouch.position.y - startSwipe.y) < verticalDeadZone)
                 Rotate();
 
             trail.EmissionDesable();
@@ -151,7 +156,7 @@ public class BlockController : MonoBehaviour
         var absDeltaY = Mathf.Abs(deltaY);
 
 
-        if (absDeltaX > absDeltaY && absDeltaX > swipeDeadZone)
+        if (absDeltaX > absDeltaY && absDeltaX > horizontalDeadZone / sens)
         {
             if (deltaX < 0)
                 return SwipeDirection.Left;
@@ -159,7 +164,7 @@ public class BlockController : MonoBehaviour
             return SwipeDirection.Right;
         }
         
-        if (absDeltaY > absDeltaX && absDeltaY > swipeDeadZone)
+        if (absDeltaY > absDeltaX && absDeltaY > verticalDeadZone)
         {
             if (deltaY < 0)
                 return SwipeDirection.Down;
@@ -435,6 +440,18 @@ public class BlockController : MonoBehaviour
     {
         normalSpeed = newSpeed;
         activeSpeed = normalSpeed;
+    }
+
+    public void SetSens(float value)
+    {
+        if (value < 1)
+            sens = 1;
+        else if (value > 3)
+            sens = 3;
+        else
+            sens = value;
+
+        PlayerPrefs.SetFloat("Sens", sens);
     }
 }
 

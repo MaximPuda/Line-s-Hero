@@ -5,27 +5,41 @@ using UnityEngine.Audio;
 
 public class AudioController : MonoBehaviour
 {
+    [Header("Mixer")]
+    [SerializeField] private AudioMixer mixer;
+
     [Header("Music")]
     [SerializeField] private AudioSource musicPlayer;
     [SerializeField] private AudioClip[] music;
-    [SerializeField] private ParticleSystem visualizer;
+
+    [Header("Visualizer")]
+    [SerializeField] private ParticleSystem[] visualizers;
     [SerializeField] private bool musicVisualization;
     [SerializeField, Range(64, 1024)] private int sampleRate = 64;
+    [SerializeField] private float sizeAmplitude = 10;
+    [SerializeField] private int particlesEmitCount = 50;
 
     [Header("UI sounds")]
-    [SerializeField] private AudioSource buttonClick;
-    [SerializeField] private AudioSource togleClick;
+    [SerializeField] private AudioSource uiPlayer;
+    [SerializeField] private AudioClip[] uiSounds;
+
+    [Header("Action sounds")]
+    [SerializeField] private AudioSource actionPlayer;
+    [SerializeField] private AudioClip[] actionSounds;
+    [SerializeField] private float maxPitch = 1.1f;
 
     [Header("FX sounds")]
-    [SerializeField] private AudioSource actionPlayer;
-    [SerializeField] private AudioClip[] sounds;
-    [SerializeField] private float maxPitch = 1.1f;
+    [SerializeField] private AudioSource fxPlayer;
+    [SerializeField] private AudioClip[] fxSounds;
 
     private float currentTime;
     float[] spectrumData;
 
     private void Start()
     {
+        mixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("Music"));
+        mixer.SetFloat("SoundsVolume", PlayerPrefs.GetFloat("Sounds"));
+
         currentTime = Time.time;
         spectrumData = new float[sampleRate];
     }
@@ -40,13 +54,28 @@ public class AudioController : MonoBehaviour
             {
                 peak += spectrumData[i];
             }
-            visualizer.Stop();
-            visualizer.startSpeed = peak * 5;
-            visualizer.startLifetime = peak * 5;
-            visualizer.Emit(50);
+            for (int i = 0; i < visualizers.Length; i++)
+            {
+                visualizers[i].Stop();
+                visualizers[i].startSpeed = peak * sizeAmplitude;
+                visualizers[i].startLifetime = peak;
+                visualizers[i].Emit(particlesEmitCount);
+            }
 
             currentTime = Time.time;
         }
+    }
+
+    private AudioClip FindClip(AudioClip[] sounds, string name)
+    {
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            if (sounds[i].name == name)
+                return sounds[i];
+        }
+
+        Debug.Log($"Sound {name} not found!");
+        return null;
     }
 
     public void PlayMusic()
@@ -66,19 +95,54 @@ public class AudioController : MonoBehaviour
 
     public void PlayActionSound(string name)
     {
-        actionPlayer.clip = null;
-        for (int i = 0; i < sounds.Length; i++)
-        {
-            if (sounds[i].name == name)
-                actionPlayer.clip = sounds[i];
-        }
+        actionPlayer.clip = FindClip(actionSounds, name);
 
         if (actionPlayer.clip != null)
-        {
-            actionPlayer.pitch = Random.Range(1, maxPitch);
             actionPlayer.Play();
+    }
+
+    public void PlayUISounds(string name)
+    {
+        uiPlayer.clip = FindClip(uiSounds, name);
+
+        if (uiPlayer.clip != null)
+            uiPlayer.Play();
+    }
+
+    public void PlayFXSounds(string name)
+    {
+        fxPlayer.clip = FindClip(fxSounds, name);
+
+        if (fxPlayer.clip != null)
+            fxPlayer.Play();
+    }
+
+    public void MuteMusic(bool isActive)
+    {
+        if (!isActive)
+        {
+            mixer.SetFloat("MusicVolume", -80f);
+            PlayerPrefs.SetFloat("Music", -80f);
         }
         else
-            Debug.Log($"Sound {name} not found!");
-    }    
+        {
+            mixer.SetFloat("MusicVolume", 0f);
+            PlayerPrefs.SetFloat("Music", 0f);
+        }    
+
+    }
+
+    public void MuteSounds(bool isActive)
+    {
+        if (!isActive)
+        {
+            mixer.SetFloat("SoundsVolume", -80f);
+            PlayerPrefs.SetFloat("Sounds", -80f);
+        }
+        else
+        {
+            mixer.SetFloat("SoundsVolume", 0f);
+            PlayerPrefs.SetFloat("Sounds", 0f);
+        }
+    }
 }

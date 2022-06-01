@@ -8,6 +8,18 @@ public static class Player
     public static int[] bestScores;
     public static int allLinesCount;
 
+    private static int GetIndexOfMode(string mode)
+    {
+        int index = -1;
+        for (int i = 0; i < modes.Length; i++)
+        {
+            if (modes[i].Contains(mode))
+                index = i;
+        }
+
+        return index;
+    }
+
     public static void Save()
     {
         FileManager.SaveToFile();
@@ -42,6 +54,16 @@ public static class Player
         Save();
     }
 
+    public static void SetPlayerName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            playerName = "Player";
+        else
+            playerName = name;
+
+        Save();
+    }
+
     public static int GetBestScore(string mode)
     {
         var index = GetIndexOfMode(mode);
@@ -63,17 +85,5 @@ public static class Player
         }
         else
             Debug.Log("Game mode not found!");
-    }
-
-    private static int GetIndexOfMode(string mode)
-    {
-        int index = -1;
-        for (int i = 0; i < modes.Length; i++)
-        {
-            if (modes[i].Contains(mode))
-                index = i;
-        }
-
-        return index;
     }
 }

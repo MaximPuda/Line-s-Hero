@@ -1,13 +1,18 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    [Header ("Animators")]
     [SerializeField] private Animator pauseAnimator;
     [SerializeField] private Animator gameOverAnimator;
     [SerializeField] private Animator fxAnimator;
 
+    [Header ("Components")]
     [SerializeField] private Canvas hudCanvas;
+    [SerializeField] private Toggle musicToggle;
+    [SerializeField] private Toggle soundsToggle;
 
     [Header("Messsages")]
     [SerializeField] private Animator messageAnimator;
