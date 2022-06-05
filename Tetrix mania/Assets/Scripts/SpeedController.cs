@@ -31,7 +31,7 @@ public class SpeedController : MonoBehaviour
 
     public void CheckLevelUp(int lines)
     {
-        if (lines % linesToSpeedUp == 0)
+        if (isActive && lines % linesToSpeedUp == 0)
             SpeedUp();
     }
 

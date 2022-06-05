@@ -100,5 +100,6 @@ public class ScoreSystem : MonoBehaviour
         resultScoreText.text = score.ToString();
         resultLinesText.text = String.Format("You cleared {0} lines", lines);
         Player.SetBestScore(GameModeSettings.mode, bestScore);
+        Player.AddLines(lines);
     }
 }

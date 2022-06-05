@@ -86,4 +86,10 @@ public static class Player
         else
             Debug.Log("Game mode not found!");
     }
+
+    public static void AddLines(int linesCount)
+    {
+        allLinesCount += linesCount;
+        Save();
+    }
 }
