@@ -72,7 +72,6 @@ public class ScoreSystem : MonoBehaviour
             case 4:
                 AddPoints(scoreFourLine);
                 OnTetrix.Invoke();
-                uiController.PlayTetris();
                 break;
                 
             default:

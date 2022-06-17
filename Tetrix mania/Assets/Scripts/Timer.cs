@@ -29,7 +29,7 @@ public class Timer : MonoBehaviour
 
     private void Update()
     {
-        if (isRunning)
+        if (isRunning && !GameManager.isGameEnded)
         {
             if (time > 1)
             {

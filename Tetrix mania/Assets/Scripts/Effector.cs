@@ -4,6 +4,7 @@ public class Effector : MonoBehaviour
 {
     [SerializeField] private ParticleSystem[] lineClearedParticles;
     [SerializeField] private ParticleSystem ComboParticles;
+    [SerializeField] private ParticleSystem speedUpParticles;
 
     public void PlayLineClearedParticles(float lineY)
     {
@@ -19,5 +20,13 @@ public class Effector : MonoBehaviour
     public void PlayComboParticles()
     {
         ComboParticles.Play();
+    }
+
+    public void PlayFXPartiles(string message)
+    {
+        if(message == "SPEED UP")
+        {
+            speedUpParticles.Play();
+        }
     }
 }

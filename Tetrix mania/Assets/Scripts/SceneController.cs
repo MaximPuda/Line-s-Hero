@@ -4,11 +4,18 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    public GameObject sceneTransition;
+    [SerializeField] private GameObject sceneTransition;
+    [SerializeField] private GameManager gameManager;
+   
     private Animator animator;
-    public void StartTransition(string sceneName)
+
+    private void Awake()
     {
         animator = GetComponent<Animator>();
+    }
+
+    public void StartTransition(string sceneName)
+    {
         switch (sceneName)
         {
             case "PlayGame":
@@ -28,7 +35,6 @@ public class SceneController : MonoBehaviour
     public void LoadStartGameScene()
     {
         SceneManager.LoadScene(1);
-        GameManager.StartGame();
         Time.timeScale = 1;
     }
 

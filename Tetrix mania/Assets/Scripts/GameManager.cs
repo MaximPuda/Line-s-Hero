@@ -7,14 +7,36 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ScoreSystem scoreSystem;
     [SerializeField] private UIController uiController;
     [SerializeField] private AudioController musicPlayer;
+    [SerializeField] private CameraMove cameraMove;
+    [SerializeField] private CameraAnimation cameraAnimation;
+
+    [SerializeField] private UnityEvent onStartGame;
+    [SerializeField] private UnityEvent onGameOver;
 
     public static bool isGamePaused;
     public static bool isGameEnded;
 
-    public static void StartGame()
+    private void Start()
     {
+        PreStartGame();
+    }
+    public void PreStartGame()
+    {
+        uiController.ActivateHud(false);
+        uiController.ActivatePreStart(true);
+        isGameEnded = true;
+        cameraMove.enabled = false;
+        cameraAnimation.PlayPreStartAnimation();
+    }
+
+    public void StartGame()
+    {
+        uiController.ActivateHud(true);
+        uiController.ActivatePreStart(false);
+        cameraMove.enabled = true;
         isGameEnded = false;
         isGamePaused = false;
+        onStartGame.Invoke();
     }
     public void Restart()
     {
@@ -25,6 +47,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        cameraMove.enabled = false;
+        onGameOver.Invoke();
         musicPlayer.StopMusic();
         uiController.PlayGameOverOpen();
         isGameEnded = true;

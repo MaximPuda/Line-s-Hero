@@ -40,7 +40,6 @@ public class BlockController : MonoBehaviour
     private Vector2 startSwipe;
     private bool isSwipeMoved;
 
-
     private void Awake()
     {
         grid = new Transform[width, height];
