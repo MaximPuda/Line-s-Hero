@@ -10,7 +10,7 @@ public class AudioController : MonoBehaviour
 
     [Header("Music")]
     [SerializeField] private AudioSource musicPlayer;
-    [SerializeField] private AudioClip[] music;
+    [SerializeField] private AudioClip mainMenuMusic;
 
     [Header("UI sounds")]
     [SerializeField] private AudioSource uiPlayer;
@@ -24,14 +24,10 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioSource fxPlayer;
     [SerializeField] private AudioClip[] fxSounds;
 
-    private List<AudioClip> fxPlaylist;
-
     private void Start()
     {
         mixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("Music"));
         mixer.SetFloat("SoundsVolume", PlayerPrefs.GetFloat("Sounds"));
-
-        fxPlaylist = new List<AudioClip>();
     }
 
     private AudioClip FindClip(AudioClip[] sounds, string name)
@@ -44,6 +40,12 @@ public class AudioController : MonoBehaviour
 
         Debug.Log($"Sound {name} not found!");
         return null;
+    }
+
+    public void SetAndPlayMusic(AudioClip clip)
+    {
+        musicPlayer.clip = clip;
+        musicPlayer.Play();
     }
 
     public void PlayMusic()

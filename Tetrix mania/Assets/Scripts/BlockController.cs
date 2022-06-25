@@ -315,12 +315,8 @@ public class BlockController : MonoBehaviour
                 CheckForLines();
                 if(!GameManager.isGameEnded)
                     spawner.SpawnNewBlock();
-                else
-                    gameManager.GameOver();
             }
         }
-        else
-            gameManager.GameOver();
 
         previousTime = Time.time;
 
@@ -355,13 +351,8 @@ public class BlockController : MonoBehaviour
                 int roundedX = Mathf.RoundToInt(children.position.x);
                 int roundedY = Mathf.RoundToInt(children.position.y);
 
-                if (roundedY < grid.GetLength(1)-1)
-                {
-                    OnBlockGrounded.Invoke();
-                    grid[roundedX, roundedY] = children;
-                }
-                else
-                    GameManager.isGameEnded = true;
+                grid[roundedX, roundedY] = children;
+                OnBlockGrounded.Invoke();
             }
         }
     }
@@ -423,11 +414,19 @@ public class BlockController : MonoBehaviour
     public void SetActiveBlock(Transform blockTransform)
     {
         activeBlockTransform = blockTransform;
-        rotationPoint = activeBlockTransform.GetChild(4);
-        trail.EmissionDesable();
-        trail.SetActiveBlock(blockTransform);
-        isPressed = false;
-        activeSpeed = normalSpeed;
+        if (CanMove())
+        {
+            rotationPoint = activeBlockTransform.GetChild(4);
+            trail.EmissionDesable();
+            trail.SetActiveBlock(blockTransform);
+            isPressed = false;
+            activeSpeed = normalSpeed;
+        }
+        else
+        {
+            activeBlockTransform.position += Vector3.up;
+            gameManager.GameOver();
+        }
     }
 
     public Transform GetActiveBlock()

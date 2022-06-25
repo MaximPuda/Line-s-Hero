@@ -17,3 +17,4 @@ MonoBehaviour:
   timerActive: 1
   speedCoef: 0.3
   linesToSpeedUp: 5
+  bgMusic: {fileID: 8300000, guid: b6ffb1ffcf02ec14f93ab09f911188da, type: 3}

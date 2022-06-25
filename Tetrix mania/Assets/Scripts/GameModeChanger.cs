@@ -11,5 +11,6 @@ public class GameModeChanger : MonoBehaviour
         GameModeSettings.linesToSpeedUp = modes[index].linesToSpeedUp;
         GameModeSettings.timerActive = modes[index].timerActive;
         GameModeSettings.speedCoef = modes[index].speedCoef;
+        GameModeSettings.bgMusic = modes[index].bgMusic;
     }
 }

@@ -6,7 +6,7 @@ public class Save
     public int[] bestScores { get; private set; }
     public int allLinesCount{ get; private set; }
 
-public Save ()
+    public Save ()
     {
         playerName = Player.playerName;
         modes = Player.modes;

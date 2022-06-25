@@ -8,4 +8,5 @@ public class GameMode : ScriptableObject
     public bool timerActive = false;
     public float speedCoef = 0.15f;
     public int linesToSpeedUp;
+    public AudioClip bgMusic;
 }
