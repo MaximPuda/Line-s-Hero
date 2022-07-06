@@ -29,11 +29,13 @@
       "source": "builtin",
       "dependencies": {}
     },
-    "com.unity.cinemachine": {
-      "version": "2.6.10",
+    "com.unity.ads": {
+      "version": "4.2.1",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
