@@ -9,7 +9,7 @@ public class CameraMove : MonoBehaviour
 
     private Transform activeBlock;
 
-    void Update()
+    private void Update()
     {
         if (!GameManager.isGameEnded && !GameManager.isGamePaused)
         {

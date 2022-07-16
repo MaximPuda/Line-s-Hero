@@ -1,11 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-public class SceneController : MonoBehaviour
+[RequireComponent(typeof(Animator))]
+public class SceneSwitcher : MonoBehaviour
 {
     [SerializeField] private GameObject sceneTransition;
-    [SerializeField] private GameManager gameManager;
    
     private Animator animator;
 
@@ -29,18 +28,17 @@ public class SceneController : MonoBehaviour
             default:
                 break;
         }
-        Time.timeScale = 1;
     }
 
     public void LoadStartGameScene()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(1);
-        Time.timeScale = 1;
     }
 
     public void LoadMainMenu()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(0);
-        Time.timeScale = 1;
     }
 }

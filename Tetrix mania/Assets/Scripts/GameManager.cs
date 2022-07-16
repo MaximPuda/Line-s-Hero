@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
+using UnityEngine.Advertisements;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,15 +10,30 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CameraMove cameraMove;
     [SerializeField] private CameraAnimation cameraAnimation;
 
+
     [SerializeField] private UnityEvent onGameStart;
 
     public static bool isGamePaused;
     public static bool isGameEnded;
 
+    private void OnEnable()
+    {
+       ADSInterstitial.instance.onAdsShowComplete += PreStartGame;
+       ADSInterstitial.instance.onAdsShowFailure += PreStartGame;
+    }
+
+    private void OnDestroy()
+    {
+        ADSInterstitial.instance.onAdsShowComplete -= PreStartGame;
+        ADSInterstitial.instance.onAdsShowFailure -= PreStartGame;
+    }
+
     private void Start()
     {
-        PreStartGame();
+        isGameEnded = true;
+        ADSInterstitial.instance.ShowAd();
     }
+
     public void PreStartGame()
     {
         audioController.SetAndPlayMusic(GameModeSettings.bgMusic);
@@ -36,12 +51,6 @@ public class GameManager : MonoBehaviour
         uiController.ActivatePreStart(false);
         isGameEnded = false;
         isGamePaused = false;
-    }
-    public void Restart()
-    {
-        StartGame();
-        SceneManager.LoadScene("PlayGame");
-        Time.timeScale = 1;
     }
 
     public void GameOver()
