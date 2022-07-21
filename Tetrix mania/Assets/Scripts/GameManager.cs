@@ -31,7 +31,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         isGameEnded = true;
-        ADSInterstitial.instance.ShowAd();
+        if (Advertisement.isInitialized)
+            ADSInterstitial.instance.ShowAd();
+        else PreStartGame();
     }
 
     public void PreStartGame()

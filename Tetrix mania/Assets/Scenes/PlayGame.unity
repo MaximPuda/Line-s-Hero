@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 40919615}
   - component: {fileID: 40919617}
   - component: {fileID: 40919616}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Finger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -330,7 +330,7 @@ GameObject:
   - component: {fileID: 44561744}
   - component: {fileID: 44561746}
   - component: {fileID: 44561745}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5730,7 +5730,7 @@ GameObject:
   - component: {fileID: 223974228}
   - component: {fileID: 223974227}
   - component: {fileID: 223974232}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6022,7 +6022,7 @@ GameObject:
   - component: {fileID: 236045413}
   - component: {fileID: 236045412}
   - component: {fileID: 236045417}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Pause
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11960,7 +11960,7 @@ GameObject:
   - component: {fileID: 504955557}
   - component: {fileID: 504955559}
   - component: {fileID: 504955558}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TapToStartBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11983,8 +11983,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 220}
-  m_SizeDelta: {x: 350, y: 50}
+  m_AnchoredPosition: {x: 0, y: 400}
+  m_SizeDelta: {x: 600, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &504955558
 MonoBehaviour:
@@ -12033,8 +12033,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -21987,7 +21987,7 @@ GameObject:
   - component: {fileID: 591191173}
   - component: {fileID: 591191175}
   - component: {fileID: 591191174}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: MessageTextBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23088,7 +23088,7 @@ GameObject:
   - component: {fileID: 854212250}
   - component: {fileID: 854212252}
   - component: {fileID: 854212251}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23523,7 +23523,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 20
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -24173,7 +24173,7 @@ GameObject:
   - component: {fileID: 1060017189}
   - component: {fileID: 1060017191}
   - component: {fileID: 1060017190}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24868,7 +24868,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1156147511}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25613,7 +25613,7 @@ GameObject:
   - component: {fileID: 1380215706}
   - component: {fileID: 1380215705}
   - component: {fileID: 1380215704}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30805,7 +30805,7 @@ GameObject:
   - component: {fileID: 1485499499}
   - component: {fileID: 1485499501}
   - component: {fileID: 1485499500}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TapToStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30828,8 +30828,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 220}
-  m_SizeDelta: {x: 350, y: 50}
+  m_AnchoredPosition: {x: 0, y: 400}
+  m_SizeDelta: {x: 600, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1485499500
 MonoBehaviour:
@@ -30878,8 +30878,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -31082,7 +31082,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1540522392}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31515,7 +31515,7 @@ GameObject:
   - component: {fileID: 1661667571}
   - component: {fileID: 1661667573}
   - component: {fileID: 1661667572}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: MessageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36725,7 +36725,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1740953139}
   - component: {fileID: 1740953140}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TimerSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36817,7 +36817,7 @@ GameObject:
   - component: {fileID: 1743889570}
   - component: {fileID: 1743889569}
   - component: {fileID: 1743889568}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37399,7 +37399,7 @@ GameObject:
   - component: {fileID: 1904670309}
   - component: {fileID: 1904670308}
   - component: {fileID: 1904670312}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57362,7 +57362,7 @@ GameObject:
   - component: {fileID: 2125058844}
   - component: {fileID: 2125058846}
   - component: {fileID: 2125058845}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Click
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57505,7 +57505,7 @@ GameObject:
   - component: {fileID: 2132184443}
   - component: {fileID: 2132184442}
   - component: {fileID: 2132184441}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -6,7 +6,9 @@ public class ADSInitializer : MonoBehaviour, IUnityAdsInitializationListener
     [SerializeField] string androidGameId;
     [SerializeField] string iOSGameId;
     [SerializeField] bool testMode = true;
+    
     private string gameId;
+
     private void Awake()
     {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("ADS");

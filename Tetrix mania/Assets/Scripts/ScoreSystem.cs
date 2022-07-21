@@ -50,10 +50,10 @@ public class ScoreSystem : MonoBehaviour
     {
         lines++;
         OutScoreToHud();
-        OnAddLines.Invoke(lines);
+        OnAddLines?.Invoke(lines);
     }
 
-    public void CheckCombo(int numberOfLines)
+    private void CheckCombo(int numberOfLines)
     {
         switch (numberOfLines)
         {
@@ -71,7 +71,7 @@ public class ScoreSystem : MonoBehaviour
 
             case 4:
                 AddPoints(scoreFourLine);
-                OnTetrix.Invoke();
+                OnTetrix?.Invoke();
                 break;
                 
             default:
@@ -80,17 +80,18 @@ public class ScoreSystem : MonoBehaviour
         
     }
 
-    public void CheckBestScore()
+    private void CheckBestScore()
     {
         if(score > bestScore)
         {
-            bestScore = score;
-
             if (!isBest)
             {
                 isBest = true;
-                OnBestScore.Invoke();
+                if(bestScore > 0)
+                    OnBestScore?.Invoke();
             }
+
+            bestScore = score;
         }
     }
 

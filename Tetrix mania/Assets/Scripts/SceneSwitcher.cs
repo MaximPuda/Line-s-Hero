@@ -32,12 +32,14 @@ public class SceneSwitcher : MonoBehaviour
 
     public void LoadStartGameScene()
     {
+        ADSBanner.instance.HideBannerAd();
         Time.timeScale = 1f;
         SceneManager.LoadScene(1);
     }
 
     public void LoadMainMenu()
     {
+        ADSBanner.instance.ShowBannerAd();
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
