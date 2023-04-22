@@ -96,7 +96,7 @@ TextureImporter:
       213: 5460964476814035986
     second: Button
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -117,6 +117,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -126,11 +127,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 1
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -155,6 +156,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -218,6 +220,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -436,7 +450,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: dc690c97bea598a20800000000000000
-      internalID: 3065080988808812237
+      internalID: 8338057602687669445
       vertices: []
       indices: 
       edges: []
@@ -478,7 +492,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: bcdc6ffdc68d9ec90800000000000000
-      internalID: -7139937772093649461
+      internalID: 3065080988808812237
       vertices: []
       indices: 
       edges: []
@@ -766,6 +780,32 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      Back: 1152453243233643518
+      ButtonBottom: -5628705084606775885
+      ButtonNormal: -6317915972322383936
+      ButtonPressed: -3964467815183115348
+      Chill: -4317430142944211546
+      Classic: 3065080988808812237
+      Logo: 4449629089324409
+      Music: -2148180446382441420
+      NoAds: -5101679769665140518
+      Panel: 2993831400148235121
+      Pause: -4080300736218894337
+      Quick: 8338057602687669445
+      RateUs: -5710598353549066562
+      Restart: 8979817489696652424
+      Settings: 2244313687965299000
+      SliderBack: 871429415106312287
+      SliderFill: -4241952406197671648
+      Sounds: 8225280431401100674
+      Statistics: -8210715569522380812
+      TextField: 3913981844337116135
+      TimerBack: -6635937807593643246
+      TogleBack: 4481972569292578322
+      TogleChecker: -2489226359885653100
+      Tuttorial: 7601490375931104171
+      UIAtlas_2048_22: 2626183309703124620
   spritePackingTag: 
   pSDRemoveMatte: 1
   pSDShowRemoveMatteOption: 1
